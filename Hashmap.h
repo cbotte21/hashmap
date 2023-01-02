@@ -5,17 +5,21 @@
 #include <string>
 #include "Linkedlist.h"
 
-//TODO: add constructor
-
 template <typename T>
 class Hashmap {
-	std::vector<Linkedlist<T>> columns;
-	bool validHash(int i);
+    std::vector<Linkedlist<T>> columns;
+	bool validHash(int i) {
+        return i < columns.size();
+    };
+    virtual int hash(T);
 	public:
-		Hashmap(int* hash(T payload); //Must provide hashing function
-		extern bool store(T data);
-		extern T get(T candide, bool& status);
-		extern int remove(T data);
-		extern void print();
-		int* hash(T payload);
-}
+        Hashmap(int size) {
+            for (int i = 0; i < size; i++) {
+                columns.push_back(Linkedlist<T>());
+            }
+        }
+        bool store(T data);
+		T get(T candide, bool& status);
+		int remove(T data);
+		void print();
+};

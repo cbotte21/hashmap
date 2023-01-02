@@ -2,36 +2,38 @@
 #include <iostream>
 
 template<typename T>
-void Linkedlist::insert(T data) {
-	linkedlist* nnode = { nullptr, data }
-	if (head == nullptr) 
-		head = nnode;
-
-	linkedlist* curr = head;
+void Linkedlist<T>::insert(T data) {
+	auto* nnode = new linkedlist<T> { nullptr, data };
+	if (head == nullptr) {
+        head = nnode;
+        return;
+    }
+	linkedlist<T>* curr = head;
 	for (; curr->next; curr = curr->next);
 	curr->next = nnode;
 }
 
-T find_r(linkedlist* curr, T candide, bool& status) { //Recursive approach
+template<typename T>
+T Linkedlist<T>::find_r(linkedlist<T>* curr, T candide, bool& status) { //Recursive approach
 	if (curr->value == candide) {
-		*status = true;
+		status = true;
 		return curr->value;
 	}
 	return find_r(curr->next, candide, status);
 }
 
 template<typename T>
-T Linkedlist::find(T candide, bool& status) {
-	*status = false; //Should be an optimization over being in recursive funcion
-	return find_r(head, status);
+T Linkedlist<T>::find(T candide, bool& status) {
+	status = false; //Should be an optimization over being in recursive funcion
+	return find_r(head, candide, status);
 }
 
 template<typename T>
-int Linkedlist::remove(T data) { //Loop approach
+int Linkedlist<T>::remove(T data) { //Loop approach
 	if (head->value == data)
 		head = head->next;
 
-	for(linkedlist* node = head; node->next != nullptr; node = node->next)
+	for(linkedlist<T>* node = head; node->next != nullptr; node = node->next)
 		if (node->next->value == data) { //TODO: Do you need to free nodes?
 			node->next = node->next->next;
 			return true;
@@ -39,8 +41,9 @@ int Linkedlist::remove(T data) { //Loop approach
 	return false;
 }
 
-void print_trailing_nodes_inclusive(linkedlist* curr, bool indentFlag) {
-	if (curr) {
+template <typename T>
+void Linkedlist<T>::print_trailing_nodes_inclusive(linkedlist<T>* curr, bool indentFlag) {
+	if (curr != nullptr) {
 		if (indentFlag)
 			std::cout << "    ";
 		std::cout << curr->value << std::endl;
@@ -48,9 +51,14 @@ void print_trailing_nodes_inclusive(linkedlist* curr, bool indentFlag) {
 	}
 }
 
-/*params:
+/*
+ * params:
  *	bool indentFlag: adds 4 spaces before value
+ *
  */
-void Linkedlist::print(bool indentFlag) {
+template <typename T>
+void Linkedlist<T>::print(bool indentFlag) {
 	print_trailing_nodes_inclusive(head, indentFlag);
 }
+
+template class Linkedlist<std::string>;
